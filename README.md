@@ -8,13 +8,13 @@ For developers: see your plugins (and others') in separated tabs, quite useful w
 For everybody: simply add a comma-separated list of authors and you'll be able to sort the plugins in two groups.
 
 ----
-<sub>***Icon marking my plugins**</sub>  
+<sub>***Icon marking my plugins***</sub>  
 ![plugins screen](assets/screenshot-1.png)
 
-<sub>***Plugin settings**</sub>  
+<sub>***Plugin settings***</sub>  
 ![plugins screen](assets/screenshot-2.png)
 
-<sub>***When viewing our/their plugins, the marked counts reflect the screen being viewed**</sub>  
+<sub>***When viewing our/their plugins, the marked counts reflect the screen being viewed***</sub>  
 ![plugins screen](assets/screenshot-1.png)
 
 
