@@ -15,7 +15,7 @@ For everybody: simply add a comma-separated list of authors and you'll be able t
 ![plugins screen](assets/screenshot-2.png)
 
 <sup>***When viewing our/their plugins, the marked counts reflect the screen being viewed***</sup>  
-![plugins screen](assets/screenshot-1.png)
+![plugins screen](assets/screenshot-3.png)
 
 
 ## FAQ
