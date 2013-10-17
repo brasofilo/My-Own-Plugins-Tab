@@ -1,0 +1,79 @@
+#mopt_config_tr, #mopt_config_tr td {
+    padding: 0;
+}
+
+#mopt_config_row {
+    margin: 10px 15px 20px 12px;
+    padding: 12px;
+    -moz-box-shadow: -3px 3px 5px 3px #E4E4E4;
+    -webkit-box-shadow: -3px 3px 5px 3px #E4E4E4;
+    box-shadow: -3px 3px 5px 3px #E4E4E4;
+}
+
+.config_hidden {
+    display: none;
+}
+
+#mopt-message{
+    display: none;
+    padding: 13px;
+    font-weight: bolder;
+    font-size: 1.2em;
+}
+
+#my-own-plugins-tab th, 
+#my-own-plugins-tab td, 
+#mopt-tr-settings th, 
+#mopt-tr-settings td {
+    border-bottom: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+#mopt-tr-settings th {
+    padding: 0 0 8px;
+}
+#mopt-tr-settings td {
+    padding: 0;
+}
+
+.mopt-table th, .mopt-table td {
+/*    border-bottom: none;*/
+}
+
+.mopt-table th {
+    vertical-align: top;
+}
+
+.mopt-table td {
+    vertical-align: middle;
+}
+
+input:focus{
+    outline: 0;
+}
+/*
+.mopt-table th {
+    width: 30%;
+}*/
+
+.mopt-table tr{
+    height: 57px;
+}
+
+.ui-icon { 
+    background-repeat: no-repeat; 
+    width: 16px; 
+    height: 16px; 
+    background-image: url(../img/ui-icons_333333_256x240.png); 
+    display: inline-table;
+    vertical-align: middle;
+    padding-bottom: 4px;    
+}
+
+
+.mopt-icon {
+    font-family: FontAwesome;
+    margin-right: 5px;
+    color: #000
+}

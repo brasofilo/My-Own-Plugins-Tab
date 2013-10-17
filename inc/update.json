@@ -1,0 +1,16 @@
+{
+    "name" : "My Own Plugins Tab",
+    "slug" : "My-Own-Plugins-Tab-master",
+    "download_url" : "https://github.com/brasofilo/My-Own-Plugins-Tab/archive/master.zip",
+    "version" : "2013.10.17",
+    "author" : "Rodolfo Buaiz",
+    "author_homepage" : "http://brasofilo.com",
+    "homepage" : "https://github.com/brasofilo/My-Own-Plugins-Tab",
+    "tested" : "3.6",
+    "sections" : {
+        "description" : "Separate your plugins from the others in the Plugins admin screen.",
+        "changelog" : "<p><ul><li><strong>2013.10.177</strong><p>Plugin launch.</p></li></ul>"
+    },
+    "upgrade_notice" : "Version 2013.10.17 Plugin launch.",
+    "last_updated" : "2013-10-17"
+}
