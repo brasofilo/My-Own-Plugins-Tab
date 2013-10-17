@@ -10,21 +10,23 @@ see your plugins, and others', in separated tabs, quite useful when they start t
 simply add a comma-separated list of authors and you'll be able to sort the plugins in two groups.
 
 ----
->***Icon marking my plugins***  
+ > ***Icon marking my plugins***  
 
 ![plugins screen](assets/screenshot-1.png)
 
->***Plugin settings***
+----
+ > ***Plugin settings***
 
 ![plugins screen](assets/screenshot-2.png)
 
->***When viewing our/their plugins, the marked counts reflect the screen being viewed*** 
+----
+ > ***When viewing our/their plugins, the marked counts reflect the screen being viewed*** 
 
 ![plugins screen](assets/screenshot-3.png)
 
-
+----
 ## FAQ
-The plugin works in Multisite, but it's not under my control, further improvements needed.
+The plugin works in Multisite, but *right now* it's not under my control, further improvements needed.
 
 ## Changelog
 
