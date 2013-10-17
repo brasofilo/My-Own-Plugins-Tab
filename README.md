@@ -1,11 +1,13 @@
 # [My Own Plugins Tab](https://github.com/brasofilo/My-Own-Plugins-Tab)
 <sup>*Version 2013.10.17*</sup>
 
-###*Separate your plugins from the others in the Plugins admin screen.*
+####*Separate your plugins from the others in the Plugins admin screen.*
 
-For developers: see your plugins (and others') in separated tabs, quite useful when they start to count in dozens.
+**For developers**:  
+see your plugins, and others', in separated tabs, quite useful when they start to count in dozens.
 
-For everybody: simply add a comma-separated list of authors and you'll be able to sort the plugins in two groups.
+**For everybody**:  
+simply add a comma-separated list of authors and you'll be able to sort the plugins in two groups.
 
 ----
 <sup>***Icon marking my plugins***</sup>  
