@@ -10,17 +10,17 @@ see your plugins, and others', in separated tabs, quite useful when they start t
 simply add a comma-separated list of authors and you'll be able to sort the plugins in two groups.
 
 ----
- > ***Icon marking my plugins***  
+ > ***ICON MARKING my plugins***  
 
 ![plugins screen](assets/screenshot-1.png)
 
 ----
- > ***Plugin settings***
+ > ***PLUGIN SETTINGS***
 
 ![plugins screen](assets/screenshot-2.png)
 
 ----
- > ***When viewing our/their plugins, the marked counts reflect the screen being viewed*** 
+ > ***WHEN VIEWING our/their plugins, the marked counts reflect the screen being viewed*** 
 
 ![plugins screen](assets/screenshot-3.png)
 
