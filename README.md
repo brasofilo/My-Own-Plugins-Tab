@@ -1,5 +1,5 @@
 # [My Own Plugins Tab](https://github.com/brasofilo/My-Own-Plugins-Tab)
-<sup>*Version 2013.10.17*</sup>
+<sup>*Version 2013.10.19*</sup>
 
 ####*Separate your plugins from the others in the Plugins admin screen.*
 
@@ -29,6 +29,10 @@ simply add a comma-separated list of authors and you'll be able to sort the plug
 The plugin works in Multisite, but *right now* it's not under my control, further improvements needed.
 
 ## Changelog
+
+Version 2013.10.19
+* Trying to get Multisite right, I think it's ok
+* Alternative local embed to FontAwesome CDN files
 
 Version 2013.10.14
 * Plugin launch

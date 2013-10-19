@@ -1,15 +1,16 @@
 <?php
+/**
+ * Main class 
+ * 
+ * @plugin My Own Plugins Tab
+ * 
+ */
 
 # Busted!
 !defined( 'ABSPATH' ) AND exit(
         "<pre>Hi there! I'm just part of a plugin, 
             <h1>&iquest;what exactly are you looking for?" );
 
-/*
- * Main class 
- * 
- * @plugin My Own Plugins Tab
- */
 class B5F_My_Own_Plugins_Tab
 {
 	/**
@@ -91,32 +92,45 @@ class B5F_My_Own_Plugins_Tab
 	 */
 	public function plugin_setup()
 	{
-        # Plugin settings (has its own $pagenow)
-        include_once __DIR__ . '/settings-mopt.php';
-        $settings = new B5F_MOPT_Settings();
-        
         global $pagenow;
         if( 'plugins.php' != $pagenow )
             return;
         
-        # Basics
+        
+        # Basics, main folder one level up
 		$this->plugin_url    = plugins_url( '/', dirname( __FILE__ ) );
-		$this->plugin_path   = plugin_dir_path( dirname( __FILE__ ) );        
+		$this->plugin_path   = plugin_dir_path( dirname( __FILE__ ) ); 
+        
+        
+        # Plugin settings
+        include_once __DIR__ . '/settings-mopt.php';
+        $settings = new B5F_MOPT_Settings();
+        
         
         # Get plugin options
         $this->options = $settings->get_options();
+        
+        
+        # Plugin is active in MS **and** is marked as do not show in subsites
+        if( !is_network_admin() && is_plugin_active_for_network(plugin_basename( B5F_MOPT_FILE )) && !(boolean)$this->options['subsites'] ) 
+            return;
+        
         $this->whose_plugins();
 
+        
         # Upper tab
         $hook_views = is_network_admin() ? '-network' : '';
 		add_filter( "views_plugins$hook_views", array( $this, 'add_row_links' ) );
 
+        
         # Add icon to our plugins
         $hook_actions = is_network_admin() ? 'network_admin_' : '';
 		add_action( "{$hook_actions}plugin_action_links", array( $this, 'add_plugin_icon' ), 1, 4 );
         
+        
         # Do, do the bugaloo
         add_action( 'load-plugins.php', array( $this, 'filter_our_plugins' ) );
+        
         
         # Self hosted updates
         include_once __DIR__ . '/plugin-update-dispatch.php';

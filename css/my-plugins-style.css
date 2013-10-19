@@ -75,5 +75,8 @@ input:focus{
 .mopt-icon {
     font-family: FontAwesome;
     margin-right: 5px;
-    color: #000
+    color: #000;
+    font-size: 1.2em;
+    line-height: 1.2em;
+    vertical-align: middle;
 }

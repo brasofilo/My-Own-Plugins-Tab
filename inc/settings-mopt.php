@@ -1,27 +1,37 @@
 <?php
+/**
+ * Settings Class 
+ * 
+ * @plugin My Own Plugins Tab
+ */
 
 # Busted!
 !defined( 'ABSPATH' ) AND exit(
         "<pre>Hi there! I'm just part of a plugin, 
             <h1>&iquest;what exactly are you looking for?" );
 
-/*
- * Settings Class 
- * 
- * @plugin My Own Plugins Tab
- */
 class B5F_MOPT_Settings
 {
     /**
      * Our multisite condition.
      * @type boolean
      */
-    private $is_multisite;
+    public $is_multisite;
     
+    
+    /**
+     * Plugin settings name
+     * @var string
+     */
     public $option_name = 'my_plugins_tab_settings';
     
+    
+    /**
+     * Plugin settings value
+     * @var array
+     */
     private $option_value;
-
+    
     
     /**
      *
@@ -31,31 +41,69 @@ class B5F_MOPT_Settings
      */
     public function __construct()
     {
-        # AJAX ACTION, leave outside $pagenow check
-        add_action( 'wp_ajax_mopt_save_config', array( $this, 'save_config' ) );
-
-        global $pagenow;
-        if( 'plugins.php' != $pagenow )
-            return;
-        
+        # Available for network is not available, force load it
         if ( ! function_exists( 'is_plugin_active_for_network' ) )
 			require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
         
-         $this->is_multisite = is_multisite() 
-            && is_plugin_active_for_network( plugin_basename( B5F_MOPT_FILE ) );
- 
-        $this->get_options();
         
+        # Internal check
+        $this->is_multisite = is_multisite() 
+           && is_plugin_active_for_network( plugin_basename( B5F_MOPT_FILE ) );
+        
+        
+        # Active in some site, but not Network Active
+        if( 
+            is_network_admin()
+            && !is_plugin_active_for_network( plugin_basename( B5F_MOPT_FILE ) ) 
+            && is_plugin_active( plugin_basename( B5F_MOPT_FILE ) ) 
+            )
+            return;
+        
+        
+        # Check and set data
+        $this->check_posted_data();
+        $this->option_value = $this->get_options();
+        
+        
+        # Add icon to plugin
         add_action(
             'after_plugin_row_' . B5F_MOPT_FILE, 
             array( $this, 'add_config_form' ), 
             10, 3
         );
-
         add_action( 'admin_print_scripts-plugins.php', array( $this, 'enqueue' ) );
     }
 
 
+    /**
+     * Check for $_POSTed data and update settings
+     * 
+     * @return void
+     */
+    public function check_posted_data()
+    {
+        if( !isset( $_POST['noncename_mopt'] ) )
+            return;
+        
+        if( wp_verify_nonce( $_POST['noncename_mopt'], plugin_basename( B5F_MOPT_FILE ) ) )
+        {
+            if ( isset($_POST['mopt_config-authors']) )
+                $this->option_value['authors'] = stripslashes_deep( $_POST['mopt_config-authors'] );
+
+            if ( isset($_POST['mopt_config-icon']) )
+                $this->option_value['icon'] = esc_html( $_POST['mopt_config-icon'] );
+
+            if ( isset($_POST['mopt_config-others']) )
+                $this->option_value['others'] = (int) $_POST['mopt_config-others'];
+            
+            if ( isset($_POST['mopt_config-subsites']) )
+                $this->option_value['subsites'] = (int) $_POST['mopt_config-subsites'];
+            
+            $this->set_options();
+        }
+    }
+    
+    
     /**
      * Style and Scripts
      */
@@ -65,10 +113,24 @@ class B5F_MOPT_Settings
             'mopt-style', 
             plugin_dir_url( B5F_MOPT_FILE ) . 'css/my-plugins-style.css'
         );
-        wp_enqueue_style( 
-            'mopt-font-awesome', 
-            '//netdna.bootstrapcdn.com/font-awesome/3.2.0/css/font-awesome.min.css'
-        );
+        
+        # FONT AWESOME
+        $http = is_ssl() ? 'https:' : 'http:';
+        $url = "$http//netdna.bootstrapcdn.com/font-awesome/3.2.0/css/font-awesome.min.csss";
+        if( $this->get_http_response_code( $url ) )
+            wp_enqueue_style( 
+                'font-awesome', 
+                $url
+            );
+        else
+        {
+            wp_enqueue_style(
+                'font-awesome',
+                plugin_dir_url( B5F_MNPT_FILE ) . 'css/font-awesome.min.css'
+            );
+            
+        }
+                
         wp_register_script(
             'mopt-js',
             plugin_dir_url( B5F_MOPT_FILE ) . 'js/my-plugins-script.js',
@@ -90,9 +152,24 @@ class B5F_MOPT_Settings
     }
 
     
+    /**
+     * Check if a file is online
+     * 
+     * brute force with suppress errors
+     * 
+     * @param string $url
+     * @return boolean
+     */
+    private function get_http_response_code( $url ) 
+    {
+        $headers = @get_headers( $url );
+        if( !$headers )
+            return false;
+        
+        return substr($headers[0], 9, 3) === '200';
+    }
     
-    
-    
+        
     /**
      * Prints the settings form
      * 
@@ -104,49 +181,13 @@ class B5F_MOPT_Settings
      */
     public function add_config_form( $wm_pluginfile, $wm_plugindata, $wm_context )
     {
-        $value = $this->get_options();   
+        $value = $this->option_value;   
         # Prevent wrong background if these conditions are met
         $class_active = ( is_network_admin() && is_plugin_active( B5F_MOPT_FILE ) && !is_plugin_active_for_network( B5F_MOPT_FILE ) ) ? 'inactive' : 'active';
         $config_row_class = 'config_hidden';      
         require_once 'settings-html.php';
     }
 
-    
-    
-    
-    
-    /**
-     * Ajax save options
-     */
-    public function save_config() 
-    {
-        $nonce = $_POST['nonce'];
-        if ( ! wp_verify_nonce( $nonce, 'mopt-nonce' ) )
-            wp_send_json_error( array( 
-                'error' => __( 'Ajax error.' ) 
-            ));
-
-        # DONNOW WHY, but this ain't working
-       /* if ( ! current_user_can( 'manage_options' ) )
-            wp_send_json_error( array( 
-                'error' => __( 'You are not authorised to perform this operation.' ) 
-            ));*/
-
-        $this->option_value = $this->get_options();
-
-        if ( isset($_POST['mopt_config-authors']) )
-            $this->option_value['authors'] = stripslashes_deep( $_POST['mopt_config-authors'] );
-
-        if ( isset($_POST['mopt_config-icon']) )
-            $this->option_value['icon'] = esc_html( $_POST['mopt_config-icon'] );
-
-        if ( isset($_POST['mopt_config-others']) )
-            $this->option_value['others'] = (int) $_POST['mopt_config-others'];
-
-        $this->set_options();
-        wp_send_json_success( __( 'Updated' ) );
-    }    
-    
     
     /**
      * Return the options, check for install and active on WP multisite
@@ -165,13 +206,12 @@ class B5F_MOPT_Settings
         // check for non defaults
         if( !isset( $values['others'] ) )
             $values['others'] = 0;
-        
+        if( !isset( $values['subsites'] ) )
+            $values['subsites'] = 0;
         
         return $values;
     }
 
-    
-    
     
     /**
      * Return the options, check for install and active on WP multisite
@@ -188,7 +228,6 @@ class B5F_MOPT_Settings
            update_option( $this->option_name, $this->option_value );
     }
 
-    
     
     /**
      * Function to escape strings
@@ -210,7 +249,6 @@ class B5F_MOPT_Settings
     }
 
 
-    
     /**
      * Prints <select><option> 
      * 
@@ -234,34 +272,4 @@ class B5F_MOPT_Settings
         echo $return;
     }
     
-    
-    
-    
-    
-    /**
-     * ALL MESSED UP, CHECK ORIGINAL
-     */
-    private function ROLE_GRAB_UNUSED()
-    {
-       global $wp_roles;
-
-        if( !isset( $value['role'][0] ) )
-            $value['role'][0] = NULL;
-
-        foreach( $wp_roles->roles as $role => $name )
-        {
-            if( function_exists( 'translate_user_role' ) )
-                $role_name = translate_user_role( $name['name'] );
-            elseif( function_exists( 'before_last_bar' ) )
-                $role_name = before_last_bar( $name['name'], 'User role' );
-            else
-                $role_name = strrpos( $name['name'], '|' );
-
-            if( $value['role'][0] !== $role )
-                $selected = '';
-            else
-                $selected = ' selected="selected"';
-            echo '<option value="' . $role . '"' . $selected . '>' . $role_name . ' (' . $role . ')' . ' </option>';
-        }
-    }
 }
