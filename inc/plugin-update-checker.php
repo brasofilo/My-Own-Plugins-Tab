@@ -267,6 +267,7 @@ class PluginUpdateChecker_1_3_1b {
 	public function checkForUpdates(){
 		$installedVersion = $this->getInstalledVersion();
 		//Fail silently if we can't find the plugin or read its header.
+        //loga($installedVersion,'iv');
 		if ( $installedVersion === null ) {
 			if ( $this->debugMode ) {
 				trigger_error(
@@ -284,7 +285,7 @@ class PluginUpdateChecker_1_3_1b {
 			$state->checkedVersion = '';
 			$state->update = null;
 		}
-		
+		//loga($state,'stt2');
 		$state->lastCheck = time();
 		$state->checkedVersion = $installedVersion;
 		$this->setUpdateState($state); //Save before checking in case something goes wrong 
@@ -318,7 +319,7 @@ class PluginUpdateChecker_1_3_1b {
 			empty($state) ||
 			!isset($state->lastCheck) ||
 			( (time() - $state->lastCheck) >= $timeout );
-
+//loga($shouldCheck, 'shouldchck');
 		if ( $shouldCheck ){
 			$this->checkForUpdates();
 		}
@@ -334,7 +335,7 @@ class PluginUpdateChecker_1_3_1b {
 		if ( empty($state) || !is_object($state)) {
 			$state = null;
 		}
-
+//loga($state,'state');
 		if ( !empty($state) && isset($state->update) && is_object($state->update) ){
 			$state->update = PluginUpdate_1_3B::fromObject($state->update);
 		}

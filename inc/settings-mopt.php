@@ -126,7 +126,7 @@ class B5F_MOPT_Settings
         {
             wp_enqueue_style(
                 'font-awesome',
-                plugin_dir_url( B5F_MNPT_FILE ) . 'css/font-awesome.min.css'
+                plugin_dir_url( B5F_MOPT_FILE ) . 'css/font-awesome.min.css'
             );
             
         }

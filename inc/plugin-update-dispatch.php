@@ -43,6 +43,7 @@ class B5F_General_Updater_and_Plugin_Love
             $config['plugin_file'], 
             $config['repo'].'-master'
         );
+    //loga($updater,'updtr');
 	}
 
     
@@ -86,6 +87,7 @@ class B5F_General_Updater_and_Plugin_Love
 		$path_parts = pathinfo($source);
 		$newsource = trailingslashit($path_parts['dirname']). trailingslashit( $this->config['repo'] );
 		rename($source, $newsource);
+        //loga($source, $newsource);
 		return $newsource;
 	}    
 
