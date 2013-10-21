@@ -4,7 +4,7 @@
  * Plugin URI:  http://github.com/brasofilo/My-Own-Plugins-Tab
  * Description: Separate your plugins from the others in the Plugins admin screen.
  * Author:      Rodolfo Buaiz
- * Version:     2013.10.19
+ * Version:     2013.10.21
  * Author URI:  https://brasofilo.com
  * License:     GPLv3
  */

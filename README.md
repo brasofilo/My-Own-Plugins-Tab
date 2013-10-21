@@ -31,6 +31,9 @@ The plugin works in Multisite, but *right now* it's not under my control, furthe
 
 ## Changelog
 
+Version 2013.10.21
+* Polishing the updater
+
 Version 2013.10.19
 * Trying to get Multisite right, I think it's ok
 * Alternative local embed to FontAwesome CDN files
