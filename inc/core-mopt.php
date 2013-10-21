@@ -93,7 +93,8 @@ class B5F_My_Own_Plugins_Tab
 	public function plugin_setup()
 	{
         global $pagenow;
-        if( 'plugins.php' != $pagenow )
+        $check_pages = array( 'plugins.php', 'update.php', 'update-core.php' );
+        if( !in_array( $pagenow, $check_pages ) )
             return;
         
         
