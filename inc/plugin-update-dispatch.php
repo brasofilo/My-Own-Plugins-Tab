@@ -81,13 +81,16 @@ class B5F_General_Updater_and_Plugin_Love
 	 */
 	public function rename_github_zip( $source, $remote_source, $thiz )
 	{
+        loga($source, $newsource); 
+        ploga($source, $newsource); 
 		if(  strpos( $source, $this->config['repo'] ) === false )
 			return $source;
 
 		$path_parts = pathinfo($source);
 		$newsource = trailingslashit($path_parts['dirname']). trailingslashit( $this->config['repo'] );
 		rename($source, $newsource);
-        //loga($source, $newsource);
+        loga($source, $newsource);//
+        ploga($source, $newsource);//
 		return $newsource;
 	}    
 
