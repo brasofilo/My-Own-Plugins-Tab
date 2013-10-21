@@ -1,5 +1,5 @@
 # [My Own Plugins Tab](https://github.com/brasofilo/My-Own-Plugins-Tab)
-<sup>*Version 2013.10.19*</sup>
+<sup>*Version 2013.10.21*</sup>
 
 ####*Separate your plugins from the others in the Plugins admin screen.*
 
@@ -26,25 +26,31 @@ simply add a comma-separated list of authors and you'll be able to sort the plug
 ![plugins screen](assets/screenshot-3.png)
 
 ----
+## Credits
+ - Uses [Font Awesome](http://fortawesome.github.io/Font-Awesome/), loaded from a [CDN](http://www.bootstrapcdn.com/#tab_fontawesome), fallback to bundled copies.
+
+ - Plugin settings idea plugged from [WP Maintenance Mode](http://wordpress.org/plugins/wp-maintenance-mode/).
+
+ - The plugin updater is an adaptatation from [***YahnisElsts / plugin-update-checker***](https://github.com/YahnisElsts/plugin-update-checker).  
+   I have a testing plugin here: [GitHub Plugin Update Checker](https://github.com/brasofilo/github-plugin-update-checker).
+ 
 ## FAQ
-The plugin works in Multisite, but *right now* it's not under my control, further improvements needed.
+The plugin works in Multisite, further tests are needed to confirm/improve the behavior/settings.
 
 ## Changelog
 
-Version 2013.10.21
-* Polishing the updater
+**Version 2013.10.21**
 
-Version 2013.10.19
+* Fixed updater, it was being blocked by `$pagenow==plugins.php`, it runs also in `update.php` and `update-core.php`.
+
+**Version 2013.10.19**
+
 * Trying to get Multisite right, I think it's ok
 * Alternative local embed to FontAwesome CDN files
 
-Version 2013.10.14
+**Version 2013.10.14**
+
 * Plugin launch
-
-## Credits
- - Uses [Font Awesome](http://fortawesome.github.io/Font-Awesome/), loaded from a [CDN](http://www.bootstrapcdn.com/#tab_fontawesome).
-
- - Plugin settings idea plugged from [WP Maintenance Mode](http://wordpress.org/plugins/wp-maintenance-mode/).
 
 ## Licence
 Released under GPL, you can use it free of charge on your personal or commercial blog.

@@ -106,6 +106,8 @@ class B5F_MOPT_Settings
     
     /**
      * Style and Scripts
+     * 
+     * If CDN not available, load from plugin sources
      */
     public function enqueue()
     {
@@ -114,14 +116,15 @@ class B5F_MOPT_Settings
             plugin_dir_url( B5F_MOPT_FILE ) . 'css/my-plugins-style.css'
         );
         
-        # FONT AWESOME
+        # CDN FONT AWESOME
         $http = is_ssl() ? 'https:' : 'http:';
-        $url = "$http//netdna.bootstrapcdn.com/font-awesome/3.2.0/css/font-awesome.min.csss";
+        $url = "$http//netdna.bootstrapcdn.com/font-awesome/3.2.0/css/font-awesome.min.css";
         if( $this->get_http_response_code( $url ) )
             wp_enqueue_style( 
                 'font-awesome', 
                 $url
             );
+        # LOCAL SOURCES
         else
         {
             wp_enqueue_style(
