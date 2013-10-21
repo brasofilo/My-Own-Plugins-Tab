@@ -9,6 +9,8 @@ see your plugins, and others', in separated tabs, quite useful when they start t
 **For everybody**:  
 simply add a comma-separated list of authors and you'll be able to sort the plugins in two groups.
 
+### _Check also [Network Only Plugins Tab](http://wordpress.org/plugins/network-only-plugins-tab/) at WP Repo_
+
 ----
  > ###ICON MARKING my plugins
 
