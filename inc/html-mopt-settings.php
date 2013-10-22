@@ -10,8 +10,17 @@
         "<pre>Hi there! I'm just part of a plugin, 
             <h1>&iquest;what exactly are you looking for?" );
 
-$authors_field = isset( $value['authors'] ) ? esc_attr( $value['authors'] ) : '';
-$icon_field = isset( $value['icon'] ) ? esc_attr( $value['icon'] ) : '';
+$authors_field = isset( $value['authors'] ) 
+    ? esc_attr( $value['authors'] ) : '';
+
+$icon_field = isset( $value['icon'] ) 
+    ? esc_attr( $value['icon'] ) : '';
+
+$name_mine_field = isset( $value['mine'] ) 
+    ? esc_attr( stripslashes( $value['mine'] ) ) : '';
+
+$name_not_mine_field = isset( $value['not-mine'] ) 
+    ? esc_attr( stripslashes( $value['not-mine'] ) ) : '';
 ?>
 
 <tr id="mopt-tr-settings" class="<?php echo $class_active; ?>">
@@ -35,27 +44,24 @@ $icon_field = isset( $value['icon'] ) ? esc_attr( $value['icon'] ) : '';
 
                 <!-- AUTHORS TEXT FIELD -->
                 <tr valign="top">
-                    <th scope="row">
-                        <label for="mopt_config-authors"><?php _e( 'User name/surmane:'); ?></label>
-                    </th>
-                    <td>
-                        <input class="large-text wide-fat" type="text" id="mopt_config-authors" name="mopt_config-authors" value="<?php echo $authors_field; ?>" />
-                        <br />
-                        <small><?php _e( '(comma separated list)'); ?></small>
-                    </td>
+                    <?php $this->print_text_field( array(
+                        'field' => 'mopt_config-authors',
+                        'text' => __( 'User name/surmane:'),
+                        'value' => $authors_field,
+                        'desc' => __( '(comma separated list)'),
+                        'class' => ''
+                    )); ?>
                 </tr>
-
-
+                    
                 <!-- ICON TEXT FIELD -->
                 <tr valign="top">
-                    <th scope="row">
-                        <label for="mopt_config-icon"><?php _e( 'Icon'); ?></label>
-                    </th>
-                    <td>
-                        <input class="large-text wide-fat mopt-icon" type="text" id="mopt_config-icon" name="mopt_config-icon" value="<?php echo $icon_field; ?>" />
-                        <br />
-                        <small><?php _e( '(This plugin uses <a href="http://fortawesome.github.io/Font-Awesome/cheatsheet/" target="_blank">Font Awesome</a>), simply copy the icon or its code. This field accepts HTML too.'); ?></small>
-                    </td>
+                    <?php $this->print_text_field( array(
+                        'field' => 'mopt_config-icon',
+                        'text' => __( 'Icon'),
+                        'value' => $icon_field,
+                        'desc' => __( "This plugin uses <a href='http://fortawesome.github.io/Font-Awesome/cheatsheet/' target='_blank'>Font Awesome</a>, simply copy the icon or its code. This field accepts HTML too." ),
+                        'class' => 'mopt-icon'
+                    )); ?>
                 </tr>
 
                 <!-- BOOLEAN DROPDOWN -->
@@ -87,6 +93,29 @@ $icon_field = isset( $value['icon'] ) ? esc_attr( $value['icon'] ) : '';
                         )); ?>
                 </tr>
                 <?php endif; ?>
+
+                    
+                <!-- MINE-STR TEXT FIELD -->
+                <tr valign="top">
+                    <?php $this->print_text_field( array(
+                        'field' => 'mopt_config-mine',
+                        'text' => __( "Name for 'mine'"),
+                        'value' => $name_mine_field,
+                        'desc' => __( '' ),
+                        'class' => ''
+                    )); ?>
+                </tr>
+                    
+                <!-- NOT-MINE-STR TEXT FIELD -->
+                <tr valign="top">
+                    <?php $this->print_text_field( array(
+                        'field' => 'mopt_config-not-mine',
+                        'text' => __( "Name for 'not mine'"),
+                        'value' => $name_not_mine_field,
+                        'desc' => __( '' ),
+                        'class' => ''
+                    )); ?>
+                </tr>
 
             </table>
         </form>

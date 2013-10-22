@@ -30,7 +30,7 @@ class B5F_MOPT_Settings
      * Plugin settings value
      * @var array
      */
-    private $option_value;
+    public $option_value;
     
     
     /**
@@ -92,6 +92,18 @@ class B5F_MOPT_Settings
 
             if ( isset($_POST['mopt_config-icon']) )
                 $this->option_value['icon'] = esc_html( $_POST['mopt_config-icon'] );
+
+            if ( isset($_POST['mopt_config-mine']) ) 
+            {
+                $this->option_value['mine'] = sanitize_text_field( $_POST['mopt_config-mine'] );
+                $this->option_value['mine-slug'] = sanitize_title( $_POST['mopt_config-mine'] );
+            }
+            
+            if ( isset($_POST['mopt_config-not-mine']) )
+            {
+                $this->option_value['not-mine'] = sanitize_text_field( $_POST['mopt_config-not-mine'] );
+                $this->option_value['not-mine-slug'] = sanitize_title( $_POST['mopt_config-not-mine'] );
+            }
 
             if ( isset($_POST['mopt_config-others']) )
                 $this->option_value['others'] = (int) $_POST['mopt_config-others'];
@@ -186,16 +198,18 @@ class B5F_MOPT_Settings
     {
         $value = $this->option_value;   
         # Prevent wrong background if these conditions are met
-        $class_active = ( is_network_admin() && is_plugin_active( B5F_MOPT_FILE ) && !is_plugin_active_for_network( B5F_MOPT_FILE ) ) ? 'inactive' : 'active';
+        $class_active = ( 
+            is_network_admin() && is_plugin_active( B5F_MOPT_FILE ) 
+            && !is_plugin_active_for_network( B5F_MOPT_FILE ) 
+            ) 
+                ? 'inactive' : 'active';
         $config_row_class = 'config_hidden';      
-        require_once 'settings-html.php';
+        require_once 'html-mopt-settings.php';
     }
 
     
     /**
      * Return the options, check for install and active on WP multisite
-     * 
-     * @todo MULTISITE????
      * 
      * @return  array $values
      */
@@ -206,7 +220,7 @@ class B5F_MOPT_Settings
         else
             $values = get_option( $this->option_name );
             
-        // check for non defaults
+        # check for non defaults
         if( !isset( $values['others'] ) )
             $values['others'] = 0;
         if( !isset( $values['subsites'] ) )
@@ -218,8 +232,6 @@ class B5F_MOPT_Settings
     
     /**
      * Return the options, check for install and active on WP multisite
-     * 
-     * @todo MULTISITE????
      * 
      * @return  array $values
      */
@@ -241,13 +253,12 @@ class B5F_MOPT_Settings
      * @param  String
      * @return String
      */
-    private function esc_attr( $text ) {
-
+    private function esc_attr( $text ) 
+    {
         if ( function_exists('esc_attr') )
             $text = esc_attr($text);
         else
             $text = attribute_escape($text);
-
         return $text;
     }
 
@@ -273,6 +284,32 @@ class B5F_MOPT_Settings
         }
         $return .= '</select></td>';
         echo $return;
+    }
+    
+    /**
+     * Print text input field
+     * 
+     * Send an array with
+     *   'field' => 
+     *   'text' => 
+     *   'value' => 
+     *   'desc' => 
+     * 
+     * @param array $data
+     */
+    private function print_text_field( $data )
+    {
+        extract( $data );
+        echo <<<HTML
+                <th scope="row">
+                    <label for="$field">$text</label>
+                </th>
+                <td>
+                    <input class="large-text wide-fat $class" type="text" id="$field" name="$field" value="$value" />
+                    <br />
+                    <small>$desc</small>
+                </td>
+HTML;
     }
     
 }

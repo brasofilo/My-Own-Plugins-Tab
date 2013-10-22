@@ -97,59 +97,38 @@ class B5F_My_Own_Plugins_Tab
         if( !in_array( $pagenow, $check_pages ) )
             return;
         
-        
         # Basics, main folder one level up
 		$this->plugin_url    = plugins_url( '/', dirname( __FILE__ ) );
 		$this->plugin_path   = plugin_dir_path( dirname( __FILE__ ) ); 
-        
-        
         # Plugin settings
-        include_once __DIR__ . '/settings-mopt.php';
+        include_once __DIR__ . '/class-mopt-settings.php';
         $settings = new B5F_MOPT_Settings();
-        
-        
         # Get plugin options
-        $this->options = $settings->get_options();
-        
-        
-        # Plugin is active in MS **and** is marked as do not show in subsites
-        if( !is_network_admin() && is_plugin_active_for_network(plugin_basename( B5F_MOPT_FILE )) && !(boolean)$this->options['subsites'] ) 
-            return;
-        
+        $this->options = $settings->option_value;
+        $this->prepare_options();
+        # Prepare authors
         $this->whose_plugins();
+        # GitHub updater
+        $this->self_updater();
+        # Plugin is active in MS **and** is marked as do not show in subsites
+        if( 
+            !is_network_admin() 
+            && is_plugin_active_for_network(plugin_basename( B5F_MOPT_FILE )) 
+            && !(boolean)$this->options['subsites'] 
+            ) 
+            return;
 
-        
         # Upper tab
         $hook_views = is_network_admin() ? '-network' : '';
 		add_filter( "views_plugins$hook_views", array( $this, 'add_row_links' ) );
-
-        
         # Add icon to our plugins
         $hook_actions = is_network_admin() ? 'network_admin_' : '';
 		add_action( "{$hook_actions}plugin_action_links", array( $this, 'add_plugin_icon' ), 1, 4 );
-        
-        
         # Do, do the bugaloo
         add_action( 'load-plugins.php', array( $this, 'filter_our_plugins' ) );
-        
-        
-        # Self hosted updates
-        include_once __DIR__ . '/plugin-update-dispatch.php';
-        $icon = !empty( $this->options['icon'] )
-            ? $this->strip_slashes_recursive( $this->options['icon'] ) : '&hearts;';
-        new B5F_General_Updater_and_Plugin_Love(array( 
-            'repo' => 'My-Own-Plugins-Tab', 
-            'user' => 'brasofilo',
-            'plugin_file' => B5F_MOPT_FILE,
-            'donate_text' => 'Buy me a beer',
-            'donate_icon' => "<span  class='mopt-icon'>$icon </span>",
-            'donate_link' => 'https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=JNJXKWBYM9JP6&lc=US&item_name=Rodolfo%20Buaiz&item_number=Plugin%20donation&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted'
-        ));	
-
    }
 
    
-    
 	/**
 	 * Add icon if plugin is ours.
 	 *
@@ -158,15 +137,21 @@ class B5F_My_Own_Plugins_Tab
 	 */
 	public function add_plugin_icon( $actions, $plugin_file, $plugin_data, $context )
 	{
+        $slugs = array( $this->options['mine-slug'], $this->options['not-mine-slug'] );
         $our_screen = isset( $_GET['plugin_status'] ) 
-            && in_array( $_GET['plugin_status'], array('my_own_plugins','not_mine' ) );
+            && in_array( $_GET['plugin_status'], $slugs );
         
         if( !$this->is_ours( $plugin_data['Author'] ) || $our_screen )
             return $actions;
         
         $in = !empty( $this->options['icon'] )
             ? $this->strip_slashes_recursive( $this->options['icon'] ) : '&#xf113;';
-        $in = '<span title="Mine" class="mopt-icon">' . $in . '</span>';
+        
+        $in = sprintf(
+            '<span title="%s" class="mopt-icon">%s</span>',
+            esc_html( stripslashes( $this->options['mine'] ) ),
+            $in
+        );
         array_unshift( $actions, $in );
 		return $actions;
 	}
@@ -183,14 +168,15 @@ class B5F_My_Own_Plugins_Tab
         # Our plugins
         if( !empty( $this->options['authors'] ) )
         {
+            $slug = $this->options['mine-slug'];
             $my_count = !empty( $this->my_plugins_count ) 
                 ? ' ('.$this->my_plugins_count.')' 
                 : '';
-            $url = 'plugins.php?plugin_status=my_own_plugins';
-            $tabs['my_own_plugins'] = sprintf(
+            $url = "plugins.php?plugin_status=$slug";
+            $tabs[$slug] = sprintf(
                 '<a href="%s">%s%s</a>',
                 is_network_admin() ? network_admin_url( $url ) : admin_url( $url ),
-                __( 'Mine' ),
+                esc_attr( stripslashes( $this->options['mine'] ) ),
                 $my_count
             );
         }
@@ -198,14 +184,15 @@ class B5F_My_Own_Plugins_Tab
         # Show other folks plugins separetedly 
         if( $this->options['others'] )
         {
+            $slug = $this->options['not-mine-slug'];
             $their_count = !empty( $this->my_plugins_count ) 
                 ? ' ('.($this->all_count - $this->my_plugins_count).')' 
                 : '';
-            $url = 'plugins.php?plugin_status=not_mine';
-            $tabs['not_mine'] = sprintf(
+            $url = "plugins.php?plugin_status=$slug";
+            $tabs[$slug] = sprintf(
                 '<a href="%s">%s%s</a>',
                 is_network_admin() ? network_admin_url( $url ) : admin_url( $url ),
-                __( 'Not mine' ),
+                esc_attr( stripslashes( $this->options['not-mine'] ) ),
                 $their_count
             );
         }
@@ -223,9 +210,10 @@ class B5F_My_Own_Plugins_Tab
     {
         add_filter( 'all_plugins', array( $this, 'count_filter_plugins' ) );
         
+        $slugs = array( $this->options['mine-slug'], $this->options['not-mine-slug'] );
         if( 
             isset( $_GET['plugin_status'] ) 
-            && in_array( $_GET['plugin_status'], array('my_own_plugins','not_mine' ) ) 
+            && in_array( $_GET['plugin_status'], $slugs ) 
             )
         {
             $this->fix_div = $_GET['plugin_status'];
@@ -254,11 +242,11 @@ class B5F_My_Own_Plugins_Tab
             {
                 switch( $_GET['plugin_status'] )
                 {
-                    case 'my_own_plugins':
+                    case $this->options['mine-slug']:
                         if( !$ours )
                            unset( $plugins[ $name ] );
                     break;
-                    case 'not_mine':
+                    case $this->options['not-mine-slug']:
                         if( $ours )
                            unset( $plugins[ $name ] );
                     break;
@@ -271,11 +259,11 @@ class B5F_My_Own_Plugins_Tab
    }
    
    
-   
     /**
      * Swap current tab classes
      * 
-     * @return void
+     * @return  void
+     * @wp-hook admin_footer
      */
     public function fix_css()
     {
@@ -291,15 +279,52 @@ class B5F_My_Own_Plugins_Tab
         <?php
     }
 
+   
+   /**
+    * Set default options used in the scope of this class
+    */
+   private function prepare_options()
+   {
+        if( empty( $this->options['mine'] ) )
+        {
+            $this->options['mine'] = __( 'Mine' );
+            $this->options['mine-slug'] = 'mine';
+        }
+        if( empty( $this->options['not-mine'] ) )
+        {
+            $this->options['not-mine'] = __( 'Not mine' );
+            $this->options['not-mine-slug'] = 'not-mine';
+        }
+   }
     
    
+   /**
+    * Self hosted updates
+    */
+   private function self_updater()
+   {
+        include_once __DIR__ . '/plugin-update-dispatch.php';
+        $icon = !empty( $this->options['icon'] )
+            ? $this->strip_slashes_recursive( $this->options['icon'] ) : '&hearts;';
+        new B5F_General_Updater_and_Plugin_Love(array( 
+            'repo' => 'My-Own-Plugins-Tab', 
+            'user' => 'brasofilo',
+            'plugin_file' => B5F_MOPT_FILE,
+            'donate_text' => 'Buy me a beer',
+            'donate_icon' => "<span  class='mopt-icon'>$icon </span>",
+            'donate_link' => 'https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=JNJXKWBYM9JP6&lc=US&item_name=Rodolfo%20Buaiz&item_number=Plugin%20donation&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted'
+        ));	
+
+
+   }
+    
    /**
     * Build authors array
     */
     private function whose_plugins()
     {
-        $authors = isset( $this->options['authors'] ) ? $this->options['authors'] : false;
-
+        $authors = isset( $this->options['authors'] ) 
+            ? $this->options['authors'] : false;
         if( $authors )
         {
             $authors = str_replace( ' ', '', $authors );
@@ -336,8 +361,5 @@ class B5F_My_Own_Plugins_Tab
         $str = html_entity_decode( stripslashes($str) );
         return $str;
     }
-    
-    
-    
-
+   
 }
