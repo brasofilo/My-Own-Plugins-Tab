@@ -21,6 +21,13 @@ $name_mine_field = isset( $value['mine'] )
 
 $name_not_mine_field = isset( $value['not-mine'] ) 
     ? esc_attr( stripslashes( $value['not-mine'] ) ) : '';
+
+if( $this->posted_data ):
+?>
+<div id="setting-error-settings_updated" class="updated settings-error"> 
+<p><strong>MOPT: Settings saved!!.</strong></p></div>
+<?php
+endif;
 ?>
 
 <tr id="mopt-tr-settings" class="<?php echo $class_active; ?>">
@@ -41,7 +48,7 @@ $name_not_mine_field = isset( $value['not-mine'] )
         <form method="post" name="post-mopt-form" action="">
  
             <table class="form-table mopt-table">
-
+            <tbody>
                 <!-- AUTHORS TEXT FIELD -->
                 <tr valign="top">
                     <?php $this->print_text_field( array(
@@ -116,20 +123,15 @@ $name_not_mine_field = isset( $value['not-mine'] )
                         'class' => ''
                     )); ?>
                 </tr>
-
+            </tbody>
+            
             </table>
-        </form>
-        <br />
-        <div class="plugin-update-tr">
-            <p id="mopt-message"></p>
-        </div>
-        <p id="submitbutton">
-        <?php
-          wp_nonce_field( plugin_basename( B5F_MOPT_FILE ), 'noncename_mopt' );
-          submit_button( 'Save settings', 'primary', 'mopt_config_submit' );  ?>
-        </p>
+                       <p id="mopt-submitbutton">
+                       <?php
+                         wp_nonce_field( plugin_basename( B5F_MOPT_FILE ), 'noncename_mopt' );
+                         submit_button( 'Save settings', 'primary', 'mopt_config_submit' );  ?>
+                       </p>
+       </form>
     </div>
-
     </td>
-    
 </tr>

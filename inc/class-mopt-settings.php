@@ -33,6 +33,13 @@ class B5F_MOPT_Settings
     public $option_value;
     
     
+    /** 
+     * Controls the visibility of "Settings Updated"
+     * 
+     * @var boolean
+     */
+    private $posted_data;
+    
     /**
      *
      * @see plugin_setup()
@@ -82,6 +89,7 @@ class B5F_MOPT_Settings
      */
     public function check_posted_data()
     {
+        $this->posted_data = false;
         if( !isset( $_POST['noncename_mopt'] ) )
             return;
         
@@ -112,7 +120,8 @@ class B5F_MOPT_Settings
                 $this->option_value['subsites'] = (int) $_POST['mopt_config-subsites'];
             
             $this->set_options();
-        }
+            $this->posted_data = true;
+       }
     }
     
     

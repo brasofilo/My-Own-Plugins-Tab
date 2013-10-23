@@ -37,16 +37,16 @@
     padding: 0;
 }
 
-.mopt-table th, .mopt-table td {
-/*    border-bottom: none;*/
-}
 
-.mopt-table th {
-    vertical-align: top;
-}
-
-.mopt-table td {
+table.mopt-table th,
+table.mopt-table td {
+    font-family: sans-serif;
+    font-size: 12px;
+    line-height: 1.4em;
     vertical-align: middle;
+    border-bottom: 0;
+    webkit-box-shadow: none !important;
+    box-shadow: none !important
 }
 
 input:focus{
@@ -57,7 +57,7 @@ input:focus{
     width: 30%;
 }*/
 
-.mopt-table tr{
+table.mopt-table tr{
     height: 57px;
 }
 

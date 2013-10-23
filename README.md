@@ -1,5 +1,5 @@
 # [My Own Plugins Tab](https://github.com/brasofilo/My-Own-Plugins-Tab)
-<sup>*Version 2013.10.21*</sup>
+<sup>*Version 2013.10.23*</sup>
 
 ####*Separate your plugins from the others in the Plugins admin screen.*
 
@@ -9,7 +9,9 @@ see your plugins, and others', in separated tabs, quite useful when they start t
 **For everybody**:  
 simply add a comma-separated list of authors and you'll be able to sort the plugins in two groups.
 
-### _Check also [Network Only Plugins Tab](http://wordpress.org/plugins/network-only-plugins-tab/) at WP Repo_
+##Related plugins
+ - [Network Only Plugins Tab](http://wordpress.org/plugins/network-only-plugins-tab/)
+ - [Favorites Sorter & Upload via URL](https://github.com/brasofilo/favorites-plugins-sorter)
 
 ----
  > ###ICON MARKING my plugins
@@ -40,6 +42,10 @@ simply add a comma-separated list of authors and you'll be able to sort the plug
 The plugin works in Multisite, further tests are needed to confirm/improve the behavior/settings.
 
 ## Changelog
+
+**Version 2013.10.23**
+
+* CSS and Settings adjustments.
 
 **Version 2013.10.21**
 
