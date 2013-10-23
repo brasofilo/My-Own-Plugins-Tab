@@ -25,7 +25,7 @@ simply add a comma-separated list of authors and you'll be able to sort the plug
 
 ----
  > ###WHEN VIEWING 
- > ####<sup>our-or-their plugins (marked counts reflect the screen being viewed -not mine in this case).</sup>
+ > ####<sup>Marked counts reflect the screen being viewed -not mine in this case.</sup>
 
 ![plugins screen](assets/screenshot-3.png)
 
