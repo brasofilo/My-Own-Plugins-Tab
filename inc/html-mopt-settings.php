@@ -14,7 +14,7 @@ $authors_field = isset( $value['authors'] )
     ? esc_attr( $value['authors'] ) : '';
 
 $icon_field = isset( $value['icon'] ) 
-    ? esc_attr( $value['icon'] ) : '';
+    ? esc_attr( stripslashes( $value['icon'] ) ): '';
 
 $name_mine_field = isset( $value['mine'] ) 
     ? esc_attr( stripslashes( $value['mine'] ) ) : '';
